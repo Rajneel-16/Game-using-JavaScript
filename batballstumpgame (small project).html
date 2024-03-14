@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BatBallStumpGame</title>
+
+  <style>
+     body{
+      background-color: rgb(246, 111, 194);
+      text-align: center;
+      font-family: Arial, Helvetica, sans-serif;
+     }
+     .choicebutton {
+      height: 150px;
+      width: 100px;
+      border: none;
+      margin: -10px;
+      padding: 10px;
+      margin-top: -3px;
+      cursor: pointer;
+      border: 5px solid brown;
+     }
+     .resetgamebutton {
+      background-color: aqua;
+      font-size: large;
+      font-weight: 700;
+      padding: 10px;
+      border-radius: 10px;
+      border: 4px solid brown;
+     }
+  </style>
+
+</head>
+<body>
+
+  <h1>BAT BALL STUMP Game</h1>
+  <button onclick="
+
+  comp = generateComputerChoice();
+  you = 'BAT';
+  result = checkresult(comp,you);
+  displayresult(comp,you,result);
+  // displayresult(generateComputerChoice(),'BAT',checkresult(generateComputerChoice(),'BAT'));
+  
+  ">
+  <img src="bat.png" alt="bat image" class="choicebutton">
+  </button>
+  
+  <button onclick="
+  
+  comp = generateComputerChoice();
+  you = 'BALL';
+  result = checkresult(comp,you);
+  displayresult(comp,you,result);
+  
+  ">
+  <img src="ball.png" alt="ball image" class="choicebutton">
+  </button>
+
+  <button onclick="
+  
+  comp = generateComputerChoice();
+  you = 'STUMP';
+  result = checkresult(comp,you);
+  displayresult(comp,you,result);
+  
+  ">
+  <img src="stump.png" alt="stump image" class="choicebutton">
+  </button>
+
+  <br><br><br>
+  <h3 id="usermove"></h3>
+  <h3 id="compmove"></h3>
+  <h3 id="resultofmoves"></h3>
+  <h3 id="finalscore"></h3>
+
+
+
+  <br><br>
+  <button onclick="
+  localStorage.clear();
+  score = {
+      userwin: 0,
+      userlost: 0,
+      usertie: 0,
+    }
+  you = 'NA';
+  comp = 'NA';
+  result = 'NA';
+  displayresult(comp,you,result);
+  " class="resetgamebutton">Reset Game</button>
+
+
+
+
+  <script>
+
+    let comp;
+    let you;
+    let result;
+
+    let scoreStr = localStorage.getItem('SavedScore');
+    let score;
+
+    if(scoreStr !== undefined) 
+    {score = JSON.parse(scoreStr);}
+    else {
+    score = {
+      userwin: 0,
+      userlost: 0,
+      usertie: 0,
+    }
+  }
+    
+    function generateComputerChoice() 
+    {
+      let randomnumber = Math.random() * 3;
+      if(randomnumber >= 0 && randomnumber <=1)
+      {comp='BAT';}
+      else if(randomnumber > 1 && randomnumber <=2)
+      {comp='BALL';}
+      else
+      {comp='STUMP';}
+      return comp;
+    }
+
+    function checkresult(comp,you)
+    {
+      if(comp===you) {score.usertie++; return 'TIE';}
+      else if(comp==='BALL' && you==='BAT') {score.userwin++; return 'YOU WON';}
+      else if(comp==='BAT' && you==='BALL') {score.userlost++; return 'COMP WON';}
+      else if(comp==='BALL' && you==='STUMP') {score.userlost++; return 'COMP WON';}
+      else if(comp==='STUMP' && you==='BALL') {score.userwin++; return 'YOU WON';}
+      else if(comp==='STUMP' && you==='BAT') {score.userlost++; return 'COMP WON';}
+      else if(comp==='BAT' && you==='STUMP') {score.userwin++; return 'YOU WON';}
+      else  return '';
+    }
+
+    function displayresult() 
+    {
+     localStorage.setItem('SavedScore',JSON.stringify(score));
+
+     document.querySelector('#usermove').innerText = `User: ${you}`;
+     document.querySelector('#compmove').innerText = `Comp: ${comp}`;
+     document.querySelector('#resultofmoves').innerText = `Result: ${result}`;
+     document.querySelector('#finalscore').innerText = `Final Score: user-${score.userwin}
+     comp-${score.userlost} tie-${score.usertie}`;
+
+     alert(`you=${you}, comp=${comp}, result=${result}`); console.log(score);
+    };
+    
+  </script>
+  
+</body>
+</html>
