@@ -1,1 +1,1 @@
-# Game-using-JavaScript
+# Game-using-JavaScript-Mini-Project
